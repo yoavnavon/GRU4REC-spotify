@@ -1,0 +1,5 @@
+.DS_Store
+
+item_idxs.json
+.vscode
+*.gz
