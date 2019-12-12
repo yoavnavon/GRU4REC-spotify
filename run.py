@@ -18,8 +18,8 @@ args = EasyDict({
     'activation': 'softmax',
     'session_key': 'session_id',
     'item_key': 'track_id_clean',
-    'data_path': 'training',
-    'test_path': 'testing',
+    'data_path': 'data/training',
+    'test_path': 'data/testing',
     'idxs_path': 'item_idxs.json',
 })
 

@@ -3,3 +3,4 @@
 item_idxs.json
 .vscode
 *.gz
+__pycache__/

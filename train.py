@@ -19,16 +19,22 @@ def get_metrics(model, loader, args, k=20):
     batch = 0
     batch_size = args.batch_size
     n_items = loader.dataset.n_items
+    tracks_feats = pd.read_csv('tracks_feats.csv', index_col=0)
     for feat, label, mask in loader:
         # [batch_size, n_classes]
         target_oh = to_categorical(label, num_classes=n_items)
-        # [batch_size, n_classes]
-        input_oh = to_categorical(feat,  num_classes=n_items)
-        # [batch_size, 1, n_clasess]
-        input_oh = np.expand_dims(input_oh, axis=1)
+        if args.input_form == 'one-hot':
+            # [batch_size, n_classes]
+            input_oh = to_categorical(feat,  num_classes=n_items)
+            # [batch_size, 1, n_clasess]
+            input_oh = np.expand_dims(input_oh, axis=1)
+            feat = input_oh
+        if args.input_form == 'content':
+            feat = tracks_feats.loc[feat, :].values
+            feat = np.expand_dims(feat, axis=1)
 
         # [batch_size, n_classes]
-        pred = model.predict(input_oh, batch_size=batch_size)
+        pred = model.predict(feat, batch_size=batch_size)
 
         # get values, index pairs
         partition = np.partition(pred, -k, axis=1)[:, -k:]
@@ -80,6 +86,10 @@ def train_model(args):
 
     epoch = 0
     batch = 0
+    rnn_idx = 2 if args.input_form == 'emb' else 1
+
+    tracks_feats = pd.read_csv('tracks_feats.csv', index_col=0)
+
     for epoch in range(1, args.epochs):
         t = tqdm(total=args.validate_batch)
         loader = SessionDataLoader(dataset, batch_size=batch_size)
@@ -90,13 +100,16 @@ def train_model(args):
             hidden_states = get_states(model_to_train.model)[0]
             hidden_states = np.multiply(real_mask, hidden_states)
             hidden_states = np.array(hidden_states, dtype=np.float32)
-            model_to_train.model.layers[1].reset_states(hidden_states)
-
-            input_oh = to_categorical(feat, num_classes=dataset.n_items)
-            input_oh = np.expand_dims(input_oh, axis=1)
-
+            model_to_train.model.layers[rnn_idx].reset_states(hidden_states)
+            if args.input_form == 'one-hot':
+                input_oh = to_categorical(feat, num_classes=dataset.n_items)
+                input_oh = np.expand_dims(input_oh, axis=1)
+                feat = input_oh
+            if args.input_form == 'content':
+                feat = tracks_feats.loc[feat, :].values
+                feat = np.expand_dims(feat, axis=1)
             target_oh = to_categorical(target, num_classes=dataset.n_items)
-            tr_loss = model_to_train.model.train_on_batch(input_oh, target_oh)
+            tr_loss = model_to_train.model.train_on_batch(feat, target_oh)
 
             batch += 1
             t.set_description(

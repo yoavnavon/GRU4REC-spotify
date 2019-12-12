@@ -1,4 +1,4 @@
-from keras.layers import Input, Dense, Dropout, CuDNNGRU, Embedding
+from keras.layers import Input, Dense, Dropout, CuDNNGRU, GRU, Embedding
 from keras.losses import categorical_crossentropy
 from keras.models import Model
 import keras.backend as K
@@ -33,16 +33,18 @@ class GRU4REC:
         self.hidden_units = args.hidden_units
         self.dropout = args.dropout
         self.n_items = n_items
+        self.set_input(args.input_form)
         self.model = self.create_model()
 
     def create_model(self):
-        inputs = Input(batch_shape=(self.batch_size, 1, self.n_items))
+        inputs = self.first_layer
         gru, gru_states = CuDNNGRU(
             self.hidden_units, stateful=True, return_state=True)(inputs)
         drop2 = Dropout(self.dropout)(gru)
         predictions = Dense(self.n_items, activation=self.activation)(drop2)
-        model = Model(input=inputs, output=[predictions])
+        model = Model(input=self.input, output=[predictions])
         model.compile(loss=self.loss, optimizer=self.optimizer)
+        model.summary()
         return model
 
     def set_loss(self, loss):
@@ -51,6 +53,18 @@ class GRU4REC:
 
         if loss == 'crossentropy':
             return categorical_crossentropy
+
+    def set_input(self, input_form):
+        if input_form == 'one-hot':
+            self.input = Input(batch_shape=(self.batch_size, 1, self.n_items))
+            self.first_layer = self.input
+        if input_form == 'emb':
+            self.input = Input(batch_shape=(self.batch_size, 1))
+            self.first_layer = Embedding(
+                self.n_items, self.emb_size)(self.input)
+        if input_form == 'content':
+            self.input = Input(batch_shape=(self.batch_size, 1, 28))
+            self.first_layer = self.input
 
 
 class MostPopular:
