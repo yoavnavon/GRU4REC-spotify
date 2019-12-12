@@ -109,8 +109,10 @@ def train_model(args):
             if args.input_form == 'content':
                 feat = tracks_feats.loc[feat, :].values
                 feat = np.expand_dims(feat, axis=1)
-            target_oh = to_categorical(target, num_classes=dataset.n_items)
-            tr_loss = model_to_train.model.train_on_batch(feat, target_oh)
+            if args.loss == 'crossentropy':
+                target = to_categorical(target, num_classes=dataset.n_items)
+
+            tr_loss = model_to_train.model.train_on_batch(feat, target)
 
             batch += 1
             t.set_description(
