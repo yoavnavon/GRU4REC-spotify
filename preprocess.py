@@ -75,9 +75,12 @@ def get_track_feats(path):
 if __name__ == "__main__":
     training_file = 'data/training/log_3_20180827_000000000000.csv.gz'
     testing_file = 'data/log_1_20180715_000000000000.csv.gz'
+    print('creating test file...')
     create_test_split(training_file, testing_file)
 
     input_path = 'data/training'
+    print('creating item_idxs...')
     get_item_idxs(input_path)
 
+    print('creating track feats data...')
     get_track_feats('data/')

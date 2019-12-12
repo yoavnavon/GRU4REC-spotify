@@ -1,6 +1,7 @@
 from keras.utils import to_categorical
 import keras.backend as K
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from dataset import SessionDataset, SessionDataLoader
 from model import GRU4REC
