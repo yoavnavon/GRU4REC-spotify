@@ -16,7 +16,7 @@
 ### Features de Tracks
 ```
 >> wget https://os.zhdk.cloud.switch.ch/swift/v1/crowdai-public/spotify-sequential-skip-prediction-challenge/20181120_track_features.tar.gz
-tar -xzf 20181120_track_features.tar.gz -C data/
+>> tar -xzf 20181120_track_features.tar.gz -C data/
   
 ```
 ## Preprocesamiento
