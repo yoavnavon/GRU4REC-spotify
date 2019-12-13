@@ -87,7 +87,11 @@ def train_model(args):
 
     epoch = 0
     batch = 0
-    rnn_idx = 2 if args.input_form == 'emb' else 1
+    rnn_idx = 1
+    if args.input_form == 'emb':
+        rnn_idx = 2
+    if args.input_form == 'content-mlp':
+        rnn_idx = 3
 
     tracks_feats = pd.read_csv('tracks_feats.csv', index_col=0)
 
@@ -106,7 +110,7 @@ def train_model(args):
                 input_oh = to_categorical(feat, num_classes=dataset.n_items)
                 input_oh = np.expand_dims(input_oh, axis=1)
                 feat = input_oh
-            if args.input_form == 'content':
+            if args.input_form.startswith('content'):
                 feat = tracks_feats.loc[feat, :].values
                 feat = np.expand_dims(feat, axis=1)
             if args.loss == 'crossentropy':

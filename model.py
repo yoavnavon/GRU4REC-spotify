@@ -104,6 +104,10 @@ class GRU4REC:
         if input_form == 'content':
             self.input = Input(batch_shape=(self.batch_size, 1, 28))
             self.first_layer = self.input
+        if input_form == 'content-mlp':
+            self.input = Input(batch_shape=(self.batch_size, 1, 28))
+            dense1 = Dense(64, activation='relu')(self.input)
+            self.first_layer = Dense(64, activation='relu')(dense1)
 
 
 class MostPopular:
