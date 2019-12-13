@@ -132,3 +132,19 @@ def train_model(args):
                 t.close()
                 t = tqdm(total=args.validate_batch)
                 # t.reset()
+
+
+def evaluate_most_popular(args):
+    model = MostPopular()
+    test_dataset = SessionDataset(
+        args.test_path,
+        args.idxs_path,
+        session_key=args.session_key,
+        item_key=args.item_key)
+
+    test_loader = SessionDataLoader(test_dataset, batch_size=args.batch_size)
+
+    rec, mrr = get_metrics(model, test_loader, args)
+    print("Recall@{}: {:5f}".format(args.topk, rec))
+    print("MRR@{}: {:5f}".format(args.topk, mrr))
+    print("\n")

@@ -7,6 +7,8 @@ from keras import regularizers
 import numpy as np
 
 import tensorflow as tf
+import pandas as pd
+import json
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 
@@ -112,18 +114,20 @@ class GRU4REC:
 
 class MostPopular:
 
-    def __init__(self, dataset_train):
-        self.train = dataset_train.df
+    def __init__(self):
+        self.train = pd.read_csv(
+            'data/training/log_3_20180827_000000000000.csv.gz')
+        self.item_idxs = json.load(open('item_idxs.json', 'r'))
         self.most_popular = None
         self.get_most_popular()
         self.model = self
 
     def get_most_popular(self):
-        grouped = self.train.groupby('item_idx').count()['session_id']
-        items = grouped.sort_values(ascending=False)
-        self.most_popular = np.zeros((len(items),))
-        for i in range(len(items)):
-            self.most_popular[i] = items[i]
+        grouped = self.train.groupby('track_id_clean').count()
+        self.most_popular = np.zeros((len(self.item_idxs),), dtype=np.int32)
+        for index in grouped.index:
+            idx = self.item_idxs[index]
+            self.most_popular[idx] = grouped.loc[index, 'session_id']
 
     def predict(self, input_oh, batch_size=64):
         return np.repeat(self.most_popular[None], batch_size, axis=0)
