@@ -30,7 +30,7 @@ def get_metrics(model, loader, args, k=20):
             # [batch_size, 1, n_clasess]
             input_oh = np.expand_dims(input_oh, axis=1)
             feat = input_oh
-        if args.input_form == 'content':
+        if args.input_form.startswith('content'):
             feat = tracks_feats.loc[feat, :].values
             feat = np.expand_dims(feat, axis=1)
 
