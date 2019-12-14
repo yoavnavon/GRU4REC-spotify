@@ -5,26 +5,36 @@
 - Keras + Tensorflow
 - pandas
 - tqdm
+- numpy
+- scikit-learn
 
 ## Descarga
+
 #### Sesiones
+
 ```
 >> wget https://recsys-spotify.s3.amazonaws.com/training_subsample_1.tar.gz
 >> tar -xzf training_subsample_1.tar.gz -C data/
 >> mv data/log_3_20180827_000000000000.csv.gz data/training/log_3_20180827_000000000000.csv.gz
 ```
+
 #### Features de Tracks
+
 ```
 >> wget https://os.zhdk.cloud.switch.ch/swift/v1/crowdai-public/spotify-sequential-skip-prediction-challenge/20181120_track_features.tar.gz
 >> tar -xzf 20181120_track_features.tar.gz -C data/
   
 ```
+
 ## Preprocesamiento
+
 ```
 >> python preprocess.py
 ```
 
 ## Entrenamiento
+
+Los parámetros se pueden modificar directamente en el archivo `run.py`. Alternativamente, si se utiliza un jupyter notebook se puede importar la función `train_model`dentro de `train.py`.
 ```
 >> python run.py
 ```
