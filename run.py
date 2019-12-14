@@ -12,15 +12,17 @@ args = EasyDict({
     'lr': 0.001,
     'beta_1': 0.9,
     'beta_2': 0.999,
-    'dropout': 0.25,
+    'dropout': 0.1,
     'topk': 20,
-    'loss': 'crossentropy',
-    'activation': 'softmax',
+    'loss': 'bpr-max',  # [crossentropy, bpr, bpr-max]
+    'activation': 'linear',
     'session_key': 'session_id',
     'item_key': 'track_id_clean',
     'data_path': 'data/training',
     'test_path': 'data/testing',
     'idxs_path': 'item_idxs.json',
+    'input_form': 'content',  # [one-hot, emb, content, content-mlp]
+    'regularization': None,
 })
 
 train_model(args)

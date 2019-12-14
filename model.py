@@ -36,10 +36,8 @@ def softmax_neg(logits, batch_size):
     softmaxed = exp / tf.reduce_sum(exp, axis=1)
     return softmaxed
 
-# def bpr_max(bpr_reg, batch_size):
 
-
-def _bpr_max(y_true, y_pred):
+def bpr_max(y_true, y_pred):
     y_true = tf.reshape(y_true, [-1])
     y_true = tf.cast(y_true, tf.int32)
     # get positive and negative scores, gather=yhat
@@ -53,7 +51,6 @@ def _bpr_max(y_true, y_pred):
     reg = 0.0001 * tf.reduce_sum(((gather**2)*y_softmax), axis=1)
     loss = tf.reduce_mean(-tf.log(sig + 1e-24) + reg)
     return loss
-    # return _bpr_max
 
 
 class GRU4REC:
@@ -93,7 +90,7 @@ class GRU4REC:
             return categorical_crossentropy
 
         if loss == 'bpr-max':
-            return _bpr_max  # (0.0001, self.batch_size)
+            return bpr_max
 
     def set_input(self, input_form):
         if input_form == 'one-hot':
