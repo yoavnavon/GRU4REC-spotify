@@ -1,5 +1,5 @@
 # Proyecto Final Sistemas Recomendadores
-
+Este es el repositorio del proyecto final del curso Sistemas Recomendadores. El proyecto consiste en un sistema recomendador basado en sesiones. El modelo está basado en el propuesto en "Session-based Recommendations With Recurrent Neural Networks" (http://arxiv.org/abs/1511.06939). El código está basado en la implementación en https://github.com/pcerdam/KerasGRU4Rec. En el notebook Spotify GRU Example se muestra un ejemplo de entrenamiento.
 ## Dependencias
 - python 3.x
 - Keras + Tensorflow
