@@ -8,7 +8,7 @@
 - numpy
 - scikit-learn
 
-## Descarga
+## Descarga
 
 #### Sesiones
 
@@ -18,7 +18,7 @@
 >> mv data/log_3_20180827_000000000000.csv.gz data/training/log_3_20180827_000000000000.csv.gz
 ```
 
-#### Features de Tracks
+#### Features de Tracks
 
 ```
 >> wget https://os.zhdk.cloud.switch.ch/swift/v1/crowdai-public/spotify-sequential-skip-prediction-challenge/20181120_track_features.tar.gz
