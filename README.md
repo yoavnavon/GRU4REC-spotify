@@ -1,16 +1,27 @@
-# Proyecto Final Sistemas Recomendadores
-Este es el repositorio del proyecto final del curso Sistemas Recomendadores. El proyecto consiste en un sistema recomendador basado en sesiones. El modelo está basado en el propuesto en "Session-based Recommendations With Recurrent Neural Networks" (http://arxiv.org/abs/1511.06939). El código está basado en la implementación en https://github.com/pcerdam/KerasGRU4Rec. En el notebook Spotify GRU Example se muestra un ejemplo de entrenamiento. El modelo se encuentra detallado en el [paper](Paper_proyecto_Recsys.pdf).
-## Dependencias
-- python 3.x
-- Keras + Tensorflow
+# GRU4REC-spotify
+
+This project aims to tackle the problem of session based recommendation. Unlike traditional
+recommender systems, where the data of each user is available, and it's possible to build a 
+profile of the user, in session based recommendation, we try to give recommendations based
+only on picks in the current session. To solve this problem, we are going to use the [GRU4REC](http://arxiv.org/abs/1511.06939)
+model for recommendation, and expand it with new features.
+
+The original model was trained and evaluated on a dataset with only 37.000 items to recommend, so we are going to put it to the limit, and evaluate it in a dataset belonging to [spotify](https://www.aicrowd.com/challenges/spotify-sequential-skip-prediction-challenge) that has more than 500.000 items to recommend, making the data much more sparse and difficult to predict.
+
+The dataset has information for each item (songs) that can be recommended, so content-based recommendation is possible. To do so, we are going to try embedding layers that are going to encode content vectors of each item, and these will be the input of the GRU4REC model. The original model only uses one-hot representations for items.
+
+The project was created in the context of the course "Recommender Systems", and more complete detail of the project can be found in the final [paper](reports/paper.pdf).
+## Dependencies
+- Python 3.x
+- keras + tensorflow
 - pandas
 - tqdm
 - numpy
 - scikit-learn
 
-## Descarga
+## Data Download
 
-#### Sesiones
+#### Sessions
 
 ```
 >> wget https://recsys-spotify.s3.amazonaws.com/training_subsample_1.tar.gz
@@ -18,7 +29,7 @@ Este es el repositorio del proyecto final del curso Sistemas Recomendadores. El 
 >> mv data/log_3_20180827_000000000000.csv.gz data/training/log_3_20180827_000000000000.csv.gz
 ```
 
-#### Features de Tracks
+#### Track Features
 
 ```
 >> wget https://os.zhdk.cloud.switch.ch/swift/v1/crowdai-public/spotify-sequential-skip-prediction-challenge/20181120_track_features.tar.gz
@@ -26,15 +37,14 @@ Este es el repositorio del proyecto final del curso Sistemas Recomendadores. El 
   
 ```
 
-## Preprocesamiento
+## Preprocessing
 
 ```
 >> python preprocess.py
 ```
 
-## Entrenamiento
+## Training
 
-Los parámetros se pueden modificar directamente en el archivo `run.py`. Alternativamente, si se utiliza un jupyter notebook se puede importar la función `train_model`dentro de `train.py`.
 ```
 >> python run.py
 ```
